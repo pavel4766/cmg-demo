@@ -19,6 +19,11 @@ spec:
         image: 730335406037.dkr.ecr.us-east-2.amazonaws.com/cmg-frontend:latest
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m  
         command: ["sh", "-c"]
         args:
         - |
