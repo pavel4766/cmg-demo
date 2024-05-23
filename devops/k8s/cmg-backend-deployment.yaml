@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: cmg-backend
-        image: 730335406037.dkr.ecr.us-east-2.ama/cmg-backend:latest
+        image: 730335406037.dkr.ecr.us-east-2.amazonaws.com/cmg-backend:latest
         ports:
         - containerPort: 80
         env:
