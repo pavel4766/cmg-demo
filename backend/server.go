@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
@@ -46,6 +45,17 @@ func main() {
 
 	app := fiber.New()
 
+  app.Use(func(c *fiber.Ctx) error {
+    c.Set("Access-Control-Allow-Origin", "*")
+		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+		if c.Method() == "OPTIONS" {
+			// Return early for preflight requests
+			return c.SendStatus(fiber.StatusNoContent)
+		}
+    return c.Next()
+  })
+
 	app.Get("/api", func(c *fiber.Ctx) error {
 		return indexHandler(c, db)
 	})
@@ -66,13 +76,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // React's local dev server
-		AllowMethods: "GET,POST,PUT,DELETE",
-		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
+	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
 }
 
 func indexHandler(c *fiber.Ctx, db *sql.DB) error {
