@@ -9,3 +9,6 @@ kubectl delete deployment backend-deployment
 kubectl apply -f ./backend-secrets.yaml
 kubectl apply -f ./backend-deployment.yaml
 kubectl apply -f ./backend-lb.yaml
+
+kubectl apply -f ./frontend-deployment.yaml
+kubectl apply -f ./frontend-lb.yaml

@@ -4,10 +4,11 @@ import axios from 'axios';
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState('');
+  const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';  // Fallback URL if environment variable is not set
 
-  // Function to fetch tasks from backend
+  // Function to fetch tasks from the backend
   const fetchTasks = async () => {
-    const response = await axios.get('http://localhost:3001/api');
+    const response = await axios.get(`${apiBaseUrl}/api`);
     setTasks(response.data.todos);
   };
 
@@ -19,7 +20,7 @@ function App() {
   // Function to add a task
   const addTask = async () => {
     if (input) {
-      await axios.post('http://localhost:3001/api', { item: input });
+      await axios.post(`${apiBaseUrl}/api`, { item: input });
       setInput('');
       fetchTasks();
     }
@@ -27,13 +28,13 @@ function App() {
 
   // Function to update a task
   const updateTask = async (id, item) => {
-    await axios.put('http://localhost:3001/api/update', { id, item });
+    await axios.put(`${apiBaseUrl}/api/update`, { id, item });
     fetchTasks();
   };
 
   // Function to delete a task
   const deleteTask = async (id) => {
-    await axios.delete('http://localhost:3001/api/delete', { data: { id } });
+    await axios.delete(`${apiBaseUrl}/api/delete`, { data: { id } });
     fetchTasks();
   };
 
