@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import env from "react-dotenv";
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState('');
-  const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';  // Fallback URL if environment variable is not set
+  const backendServiceUrl = env.REACT_APP_BACKEND_URL; 
+  console.log("backendServiceUrl ${backendServiceUrl}")
+  const backendServicePort = env.REACT_APP_BACKEND_PORT;
+  const apiBaseUrl = `http://${backendServiceUrl}:${backendServicePort}`;
+  console.log(`apiBaseUrl ${apiBaseUrl}`)
 
   // Function to fetch tasks from the backend
   const fetchTasks = async () => {
+    console.log(`apiBaseUrl ${apiBaseUrl}`)
     const response = await axios.get(`${apiBaseUrl}/api`);
     setTasks(response.data.todos);
   };
 
   // Fetch tasks when the component mounts
   useEffect(() => {
+    console.log(`apiBaseUrl ${apiBaseUrl}`)
     fetchTasks();
   }, []);
 

@@ -9,5 +9,3 @@ FROM nginx:alpine
 COPY --from=builder /app/build /usr/share/nginx/html
 EXPOSE 80
 
-# The last line is not strictly necessary as it's the default command for the nginx image
-CMD ["nginx", "-g", "daemon off;"]

@@ -69,7 +69,7 @@ func main() {
 	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:80", // React's local dev server
+		AllowOrigins: "*", // React's local dev server
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
