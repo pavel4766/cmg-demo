@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	_ "github.com/lib/pq"
 	"log"
 	"os"
@@ -63,9 +64,15 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "80"
+		port = "8080"
 	}
 	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:80", // React's local dev server
+		AllowMethods: "GET,POST,PUT,DELETE",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 }
 
 func indexHandler(c *fiber.Ctx, db *sql.DB) error {
