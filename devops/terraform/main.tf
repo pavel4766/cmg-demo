@@ -177,3 +177,12 @@ resource "aws_ecr_repository" "cmg-backend" {
   }
 }
 
+resource "aws_ecr_repository" "cmg-frontend" {
+  name                 = "cmg-frontend" 
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
+
