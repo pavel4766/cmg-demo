@@ -5,7 +5,7 @@ export $(sops -d .env | xargs)
 
 envsubst < ./backend-secrets.yaml.tpl > ./backend-secrets.yaml
 
-kubectl delete deployment cmg-backend-deployment 
+kubectl delete deployment backend-deployment 
 kubectl apply -f ./backend-secrets.yaml
-kubectl apply -f ./cmg-backend-deployment.yaml
-kubectl apply -f ./cmg-backend-lb.yaml
+kubectl apply -f ./backend-deployment.yaml
+kubectl apply -f ./backend-lb.yaml
