@@ -6,7 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 	"log"
+	"math/big"
+	"math/rand"
 	"os"
+	"time"
 )
 
 func main() {
@@ -45,16 +48,16 @@ func main() {
 
 	app := fiber.New()
 
-  app.Use(func(c *fiber.Ctx) error {
-    c.Set("Access-Control-Allow-Origin", "*")
+	app.Use(func(c *fiber.Ctx) error {
+		c.Set("Access-Control-Allow-Origin", "*")
 		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
 		if c.Method() == "OPTIONS" {
 			// Return early for preflight requests
 			return c.SendStatus(fiber.StatusNoContent)
 		}
-    return c.Next()
-  })
+		return c.Next()
+	})
 
 	app.Get("/api", func(c *fiber.Ctx) error {
 		return indexHandler(c, db)
@@ -72,12 +75,49 @@ func main() {
 		return deleteHandler(c, db)
 	})
 
+	// New route for factorial calculation
+	app.Get("/api/factorial", func(c *fiber.Ctx) error {
+		return factorialHandler(c)
+	})
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
 	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
+}
+
+// Factorial calculation function using big integers
+func factorial(n int64) *big.Int {
+	result := big.NewInt(1)
+	for i := int64(2); i <= n; i++ {
+		result.Mul(result, big.NewInt(i))
+	}
+	return result
+}
+
+// Handler for factorial calculation
+func factorialHandler(c *fiber.Ctx) error {
+  number := rand.Int63n(10000) // Generate a random number up to 100
+
+	start := time.Now()
+
+	var result *big.Int
+	for i := 0; i < 100; i++ {
+		result = factorial(number)
+	}
+
+	elapsed := time.Since(start)
+
+	// Log the result and the duration of the computation
+	log.Printf("Computed factorial of %d in %s\n", number, elapsed)
+
+	return c.JSON(fiber.Map{
+		"number":    number,
+		"factorial": result.String(),
+		"duration":  elapsed.String(),
+	})
 }
 
 func indexHandler(c *fiber.Ctx, db *sql.DB) error {
