@@ -55,7 +55,7 @@ spec:
     kind: Deployment
     name: cmg-backend-deployment
   minReplicas: 3
-  maxReplicas: 10
+  maxReplicas: 100
   metrics:
   - type: Resource
     resource:
