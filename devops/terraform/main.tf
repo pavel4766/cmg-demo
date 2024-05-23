@@ -57,6 +57,7 @@ module "eks" {
 
   cluster_addons = {
     aws-ebs-csi-driver = {
+      addon_version            = "v1.30.0-eksbuild.1"
       service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
     }
   }
@@ -169,7 +170,7 @@ resource "aws_db_instance" "cmg" {
 
 # ECR
 resource "aws_ecr_repository" "cmg-backend" {
-  name                 = "cmg-backend" 
+  name                 = "cmg-backend"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -178,7 +179,7 @@ resource "aws_ecr_repository" "cmg-backend" {
 }
 
 resource "aws_ecr_repository" "cmg-frontend" {
-  name                 = "cmg-frontend" 
+  name                 = "cmg-frontend"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
